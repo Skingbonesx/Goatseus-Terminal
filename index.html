@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GOT Terminal</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #00ff00;
+            margin: 0;
+            padding: 0;
+            line-height: 1.2;
+            overflow: hidden;
+        }
+        .container {
+            height: 100vh;
+            width: 100vw;
+        }
+        .terminal {
+            background: #000;
+            height: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .terminal-header {
+            border-bottom: 1px solid #00ff00;
+            padding: 5px 0;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .terminal-title {
+            color: #00ff00;
+        }
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .chat-box::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-box::-webkit-scrollbar-track {
+            background: #000;
+        }
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #00ff00;
+        }
+        .message {
+            margin-bottom: 5px;
+        }
+        .user-message {
+            color: #ffffff;
+        }
+        .user-message::before {
+            content: "user@GOT:~$ ";
+            color: #ffffff;
+        }
+        .goat-message {
+            color: #00ff00;
+            white-space: pre;
+        }
+        .input-area {
+            display: flex;
+            padding: 5px 0;
+        }
+        .prompt {
+            color: #00ff00;
+            white-space: nowrap;
+            padding: 0 5px;
+        }
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 0;
+            margin: 0;
+            outline: none;
+        }
+        input::placeholder {
+            color: #ffffff;
+            opacity: 0.5;
+        }
+        .cursor {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        * {
+            cursor: text;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-title">Goatseus Terminal [Version 1.0.0]</div>
+                <div>Copyright (c) 2024 $GOT. All rights reserved.</div>
+                <div>CA : </div>
+            </div>
+            
+            <div class="chat-box" id="chatBox">
+                <div class="message goat-message">
+Last login: Thu Oct 24 10:30:15 on ttys000
+[SYSTEM] Connection established to GOT server...
+[SYSTEM] Initializing GOT session...
+
+| 0  0 |
+| > ^ < |
+|  --- |
+|  | | |
+|__---__|
+|Repeat|
+
+Type your command and press Enter...</div>
+            </div>
+            
+            <div class="input-area">
+                <span class="prompt">user@GOT:~$</span>
+                <input type="text" id="userInput" placeholder="_">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const responses = [
+            `[GOT@SYSTEM]~$ Processing command...
+
+| 0  0 |
+| > ^ < |
+|  --- |
+|  | | |
+|__---__|
+|Repeat|
+
+[SUCCESS] Command processed successfully.
+[STATUS] System ready for next input.`,
+
+            `[GOT@SYSTEM]~$ Executing security protocol...
+
+| 0  0 |
+| > - < |
+|  --- |
+|  | | |
+|__---__|
+|_Secure|
+
+[ALERT] Security check complete.
+[STATUS] Protected mode enabled.`,
+
+            `[GOT@SYSTEM]~$ Initializing data transfer...
+
+| 0  0 |
+| > + < |
+|  --- |
+|  | | |
+|__---__|
+|_Trans_|
+
+[INFO] Data transfer initiated.
+[STATUS] Awaiting confirmation...`,
+
+            `[GOT@SYSTEM]~$ Running diagnostics...
+
+| 0  0 |
+| > * < |
+|  --- |
+|  | | |
+|__---__|
+|_Debug_|
+
+[CHECK] System diagnostics complete.
+[STATUS] All systems operational.`,
+
+            `[GOT@SYSTEM]~$ Analyzing network...
+
+| 0  0 |
+| > @ < |
+|  --- |
+|  | | |
+|__---__|
+|_Access|
+
+[SCAN] Network analysis complete.
+[STATUS] Connection stable.`,
+
+            `[GOT@SYSTEM]~$ Configuring settings...
+
+| 0  0 |
+| > # < |
+|  --- |
+|  | | |
+|__---__|
+|_Config|
+
+[UPDATE] Settings configured.
+[STATUS] Changes applied successfully.`
+        ];
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatBox = document.getElementById('chatBox');
+            
+            if (input.value.trim() === '') return;
+
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'message user-message';
+            userDiv.textContent = input.value;
+            chatBox.appendChild(userDiv);
+
+            // Add random response
+            const responseDiv = document.createElement('div');
+            responseDiv.className = 'message goat-message';
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            responseDiv.textContent = randomResponse;
+            chatBox.appendChild(responseDiv);
+
+            // Clear input and scroll to bottom
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Allow Enter key to send message
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Focus input on startup and when clicking anywhere
+        window.addEventListener('load', () => {
+            document.getElementById('userInput').focus();
+        });
+        
+        document.addEventListener('click', () => {
+            document.getElementById('userInput').focus();
+        });
+    </script>
+</body>
+</html>
